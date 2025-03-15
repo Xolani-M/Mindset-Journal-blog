@@ -3,6 +3,7 @@ package com.mindsetjournal.mappers;
 
 import com.mindsetjournal.domain.PostStatus;
 import com.mindsetjournal.domain.dtos.CategoryDTO;
+import com.mindsetjournal.domain.dtos.CreateCategoryRequest;
 import com.mindsetjournal.domain.entities.Category;
 import com.mindsetjournal.domain.entities.Post;
 import org.mapstruct.*;
@@ -14,6 +15,8 @@ public interface CategoryMapper {
 
     @Mapping(target = "postCount", source = "posts", qualifiedByName ="calculatePostCount" )
     CategoryDTO toDto(Category category);
+
+    Category toEntity(CreateCategoryRequest createCategoryRequest);
 
     @Named("calculatePostCount")
     default long calculatePostCount(List<Post> posts) {
