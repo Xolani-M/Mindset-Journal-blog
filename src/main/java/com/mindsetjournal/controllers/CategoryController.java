@@ -1,14 +1,15 @@
 package com.mindsetjournal.controllers;
 
 import com.mindsetjournal.domain.dtos.CategoryDTO;
+import com.mindsetjournal.domain.dtos.CreateCategoryRequest;
 import com.mindsetjournal.domain.entities.Category;
 import com.mindsetjournal.mappers.CategoryMapper;
 import com.mindsetjournal.services.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,4 +29,15 @@ public class CategoryController {
                 .toList();
         return ResponseEntity.ok(categories);
     }
+
+    @PostMapping
+    public ResponseEntity<CategoryDTO> createCategory(
+            @Valid @RequestBody CreateCategoryRequest createCategoryRequest) {
+        Category categoryToCreate = categoryMapper.toEntity(createCategoryRequest);
+        Category savedCategory = categoryService.createCategory(categoryToCreate);
+        return new ResponseEntity<>(categoryMapper.toDto(savedCategory),
+                HttpStatus.CREATED);
+
+    }
+
 }
